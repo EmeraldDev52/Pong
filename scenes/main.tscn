@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://155xx7s6y6ta"]
+
+[ext_resource type="Script" uid="uid://cmglyj2nr47qq" path="res://scripts/audio_manager.gd" id="1_85g3d"]
+[ext_resource type="PackedScene" uid="uid://be6debb3qj8xs" path="res://scenes/game_manager.tscn" id="1_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cod53i4ndk1ss" path="res://scenes/Paddle.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://neafyrt5gjco" path="res://scenes/ball.tscn" id="1_sugp2"]
+[ext_resource type="AudioStream" uid="uid://b2l6xdyc4qdje" path="res://blipSelect.wav" id="1_tipki"]
+[ext_resource type="Texture2D" uid="uid://c6rtb46gukbme" path="res://dottedLine.png" id="2_0wfyh"]
+[ext_resource type="AudioStream" uid="uid://dogd86tahdsby" path="res://pickupCoin.wav" id="2_85g3d"]
+[ext_resource type="Script" uid="uid://ckbps7rhuxxgg" path="res://scripts/label.gd" id="5_tbgi4"]
+[ext_resource type="FontFile" uid="uid://bovyixcu252g2" path="res://Minecraft-Regular.otf" id="5_tefeu"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_85g3d"]
+a = Vector2(-576, 0)
+b = Vector2(576, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_choun"]
+a = Vector2(-576, 0)
+b = Vector2(576, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_15fls"]
+size = Vector2(20, 648)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p502b"]
+size = Vector2(20, 648)
+
+[node name="Main" type="Node2D" unique_id=213801643]
+
+[node name="AudioManager" type="Node" parent="." unique_id=1728999339]
+unique_name_in_owner = true
+script = ExtResource("1_85g3d")
+
+[node name="Bounce" type="AudioStreamPlayer2D" parent="AudioManager" unique_id=1749044827]
+stream = ExtResource("1_tipki")
+
+[node name="Score" type="AudioStreamPlayer2D" parent="AudioManager" unique_id=2101850420]
+stream = ExtResource("2_85g3d")
+
+[node name="GameManager" parent="." unique_id=1281354549 instance=ExtResource("1_jyhfs")]
+unique_name_in_owner = true
+
+[node name="Score" type="CanvasLayer" parent="." unique_id=1170742348]
+follow_viewport_enabled = true
+
+[node name="score1" type="Label" parent="Score" unique_id=1395336136]
+offset_left = -100.0
+offset_top = -300.0
+offset_right = -50.0
+offset_bottom = -231.0
+offset_transform_enabled = true
+theme_override_fonts/font = ExtResource("5_tefeu")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("5_tbgi4")
+
+[node name="score2" type="Label" parent="Score" unique_id=1760137196]
+offset_left = 100.0
+offset_top = -300.0
+offset_right = 140.0
+offset_bottom = -231.0
+theme_override_fonts/font = ExtResource("5_tefeu")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("5_tbgi4")
+
+[node name="Ball" parent="." unique_id=72113748 instance=ExtResource("1_sugp2")]
+
+[node name="Divider" type="Sprite2D" parent="." unique_id=1095536010]
+texture_repeat = 2
+scale = Vector2(0.31249997, 0.59558827)
+texture = ExtResource("2_0wfyh")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 1088)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1686326434]
+
+[node name="Boundaries" type="Node" parent="." unique_id=1400407595]
+
+[node name="Top" type="StaticBody2D" parent="Boundaries" unique_id=188876591]
+position = Vector2(0, -324)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/Top" unique_id=554036807]
+shape = SubResource("SegmentShape2D_85g3d")
+
+[node name="Bottom" type="StaticBody2D" parent="Boundaries" unique_id=320751248]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Boundaries/Bottom" unique_id=86203794]
+position = Vector2(0, 324)
+shape = SubResource("SegmentShape2D_choun")
+
+[node name="paddles" type="Node" parent="." unique_id=1899884284]
+
+[node name="Paddle1" parent="paddles" unique_id=364239852 instance=ExtResource("1_o5qli")]
+position = Vector2(-500, 9)
+move_up_key = "move_up1"
+move_down_key = "move_down1"
+
+[node name="Paddle2" parent="paddles" unique_id=904947530 instance=ExtResource("1_o5qli")]
+position = Vector2(500, 0)
+move_up_key = "move_up2"
+move_down_key = "move_down2"
+
+[node name="player1" type="Area2D" parent="paddles" unique_id=464245413]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="paddles/player1" unique_id=1828022345]
+position = Vector2(-586, 0)
+shape = SubResource("RectangleShape2D_15fls")
+
+[node name="player2" type="Area2D" parent="paddles" unique_id=1865444679]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="paddles/player2" unique_id=1971838405]
+position = Vector2(586, 0)
+shape = SubResource("RectangleShape2D_p502b")
+
+[connection signal="scored" from="GameManager" to="AudioManager" method="_on_game_manager_scored"]
+[connection signal="scored" from="GameManager" to="Ball" method="_on_game_manager_scored"]
+[connection signal="bounce" from="Ball" to="AudioManager" method="_on_ball_bounce"]
+[connection signal="body_entered" from="paddles/player1" to="GameManager" method="_on_player_1_body_entered"]
+[connection signal="body_entered" from="paddles/player2" to="GameManager" method="_on_player_2_body_entered"]

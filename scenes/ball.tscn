@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://neafyrt5gjco"]
+
+[ext_resource type="Script" uid="uid://btxblnn0xcf64" path="res://scripts/ball.gd" id="1_7s4qf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cbx31"]
+radius = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x8fbi"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=949016712]
+collision_layer = 2
+motion_mode = 1
+platform_on_leave = 2
+script = ExtResource("1_7s4qf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1354766415]
+shape = SubResource("CircleShape2D_cbx31")
+
+[node name="Panel" type="Panel" parent="." unique_id=360812155]
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 7.0
+offset_bottom = 7.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_x8fbi")
+
+[node name="Timer" type="Timer" parent="." unique_id=2067157162]
+wait_time = 2.0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
